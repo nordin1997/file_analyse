@@ -24,25 +24,78 @@ const OverdueSalesTable = ({ orders = [], isLoading = false }: any) => {
             </div>
           );
         },
+        sorter:(record1:any,record2:any)=>{
+          return record1.store.marketplace>record2.store.marketplace;
+        },
         responsive: ["md"],
       },
       {
         title: "STORE",
         render: (record: any) => record.store.shopName,
         responsive: ["md"],
+        sorter:(record1:any,record2:any)=>{
+          return record1.store.shopName>record2.store.shopName;
+        },
       },
       {
         title: "ORDER ID",
         dataIndex: "orderId",
+        sorter:(record1:any,record2:any)=>{
+          return record1.orderId>record2.orderId;
+        },
       },
       {
         title: "ITEMS",
         dataIndex: "items",
         align: "center",
+        sorter:(record1:any,record2:any)=>{
+          return record1.items>record2.items;
+        },
       },
       {
         title: "DESTINATION",
         dataIndex: "destination",
+        responsive: ["md"],
+        sorter:(record1:any,record2:any)=>{
+          return record1.destination>record2.destination;
+        },
+      },
+      {
+        title: "DAYS OVERDUE",
+        render: (record:any)=>{ 
+          const date2:any=new Date().getTime();
+          const date1:any=new Date(record.latest_ship_date).getTime();
+          return <p style={{color:"red"}}>{Math.floor((date1-date2)/(24*3600*1000))}</p>;
+        },
+        sorter:(record1:any,record2:any)=>{
+          return record1>record2;
+        },
+        responsive: ["md"],
+      },
+      {
+        title: "ORDER VALUE",
+        // dataIndex: "orderValue",
+        render: (record:any)=> {return <p>{"$"+ record.orderValue}</p>},
+        responsive: ["md"],
+        sorter:(record1:any,record2:any)=>{
+          return record1.orderValue>record2.orderValue;
+        },
+      },
+      {
+        title: "ORDER TAXES",
+        // dataIndex: "taxes",
+        render: (record:any)=> {return <p>{Math.round(record.taxes)+"%"}</p>},
+        sorter:(record1:any,record2:any)=>{
+          return record1.taxes>record2.taxes;
+        },
+        responsive: ["md"],
+      },
+      {
+        title: "ORDER TOTAL",
+        render: (record:any)=>{return <p>{"$"+(record.items*record.orderValue).toFixed(2)}</p>},
+        sorter:(record1:any,record2:any)=>{
+          return record1>record2;
+        },
         responsive: ["md"],
       },
     ],
